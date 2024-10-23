@@ -19,11 +19,11 @@ function handleCellClick(event){
     clickedCell.textContent = currentPlayer;
 
     if(checkWinner()){
-        statusDisplay.textContent = `Player '${currentPlayer}' has won!`;
+        statusDisplay.textContent = `Status: Player '${currentPlayer}' has won!`;
         return;
     }
     if(gameState.every(cell => cell != ' ')){
-        statusDisplay.textContent = "It's a draw!";
+        statusDisplay.textContent = "Status: It's a draw!";
         return;
     }
 
@@ -86,6 +86,9 @@ async function sendStateToBackend(){
         if(data.action !== undefined){
             gameState[data.action] = 'O';
             updateState();
+            if(checkWinner()){
+                statusDisplay.textContent = `Player 'O' has won!`;
+            }
         }
     }
     catch(error){
@@ -93,4 +96,11 @@ async function sendStateToBackend(){
     }
 }
 
+function clearBoard(){
+    gameState = [' ',' ',' ',' ',' ',' ',' ',' ',' '];
+    updateState();
+}
+
 cells.forEach(cell => cell.addEventListener('click', handleCellClick));
+clearBtn = document.getElementById('clear-btn');
+clearBtn.addEventListener('click', clearBoard);
